@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Privacy Demo</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 50px; }
+    h1 { font-size: 2em; margin-bottom: 10px; }
+    p { font-size: 1.2em; margin-bottom: 20px; }
+    button {
+      padding: 12px 24px;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      background: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    pre {
+      text-align: left;
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Privacy Demo 👀</h1>
+  <p>This site can already see things about you... Want to know what?</p>
+  <button onclick="reveal()">Show What You Know</button>
+  <pre id="out"></pre>
+
+  <script>
+    async function reveal() {
+      const data = {
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language: navigator.language,
+        platform: navigator.platform,
+        vendor: navigator.vendor,
+        doNotTrack: navigator.doNotTrack,
+        plugins: Array.from(navigator.plugins).map(p => p.name),
+      };
+
+      const res = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+      document.getElementById("out").textContent =
+        JSON.stringify(json, null, 2);
+    }
+  </script>
+</body>
+</html>
