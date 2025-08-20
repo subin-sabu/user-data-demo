@@ -50,6 +50,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(3000, () => {
-  console.log("Demo running → http://localhost:3000");
+server.listen(3000, "0.0.0.0", () => {
+  console.log("Demo running on port 3000 → accessible from outside of this server if firewall allows");
 });
